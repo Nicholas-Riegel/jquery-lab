@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Find the Cookies!!!</title>
+</head>
+<body>
+    <h1>Find the Cookies!!!</h1>
+    <h3>Find as many cookies as you can and put them in the cookie jar in 30 seconds!</h3>
+    <div id="hero">
+        <div>
+            <h3 id="timer-label">Timer: </h3>
+            <h3 id="timer"></h3>
+        </div>
+        <div>
+            <h3 id="high-score-label">High Score: </h3>
+            <h3 id="high-score"></h3>
+            <h3 id="your-score-label">Your score: </h3>
+            <h3 id="your-score"></h3>
+        </div>
+    </div>
+    <main>
+        <section id="gameboard-container"></section>
+        <div id="dropZone-container">
+            <h4>Move cookie here when found!</h4>
+            <div id="dropZone"></div>
+        </div>
+    </main>
+    <div id="game-status-div">
+        <h2>Game Status: </h2> &nbsp;
+        <h2 id="status-display"></h2>
+    </div>
+    <div id="start-stop-btns">
+        <button id="start-btn">Start New Game</button>
+        <button id="stop-btn">Stop Game</button>
+    </div>
+    <label for="numberColumns">You can change the number of columns from 5 to 10!
+        <input type="number" id="numberColumns" min="5" max="10">
+        <button id="getColNo">Enter</button>
+    </label>
+    <script src="app.js"></script>
+</body>
+</html>
