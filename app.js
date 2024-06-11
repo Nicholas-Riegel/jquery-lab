@@ -17,7 +17,7 @@ let columnNumber = 5
 let cookiePic = null;
 
 // game timer
-const timer = document.querySelector('#timer')
+const timer = $('#timer')
 let timeLeft = 30
 let timerOn = false;
 // this will be the setInterval(updateTimer, 1000) function
@@ -27,45 +27,45 @@ let highScore = 0
 let playerScore = 0
 
 // displays hints, whether game is over, etc.
-const statusDisplay = document.querySelector('#status-display')
+const statusDisplay = $('#status-display')
 // where cookies are dropped when finished
-const dropZone = document.querySelector('#dropZone')
-const startButton = document.querySelector('#start-btn')
-const stopButton = document.querySelector('#stop-btn')
-const columnNumberButton = document.querySelector('#getColNo')
+const dropZone = $('#dropZone')
+const startButton = $('#start-btn')
+const stopButton = $('#stop-btn')
+const columnNumberButton = $('#getColNo')
 
-const playerScoreDisplay = document.querySelector('#your-score')
-const highScoreDisplay = document.querySelector('#high-score')
+const playerScoreDisplay = $('#your-score')
+const highScoreDisplay = $('#high-score')
 
 // -----------------------------------Start Page Defaults----------------------------------------------------
 
-timer.innerText = timeLeft
-playerScoreDisplay.innerText = playerScore
-highScoreDisplay.innerText = highScore
+timer.text(timeLeft)
+playerScoreDisplay.text(playerScore)
+highScoreDisplay.text(highScore)
 
 // -----------------------------------Event Listeners----------------------------------------------------
 
 
 // start game
-startButton.addEventListener('click', e => {
+startButton.on('click', e => {
     // chatGPT definitely helped with this code: https://chat.openai.com/c/b5238c30-289f-4511-8ce2-47197b7ed0f8
     // remove cookies from cookie jar drop zone
-    const parent = document.getElementById('dropZone');
-    const childrenToRemove = parent.getElementsByClassName('cookiePic');
-    const childrenArray = Array.from(childrenToRemove);
-    childrenArray.forEach(x => {
-        parent.removeChild(x);
+    const parent = $('#dropZone');
+    const childrenToRemove = parent.find('.cookiePic');
+    childrenToRemove.each(function() {
+        $(this).remove();
     });
+
     // set player score to 0
     playerScore = 0
-    document.querySelector('#your-score').innerText = playerScore
+    $('#your-score').text(playerScore)
     // set timer to 30s
     timeLeft = 30
 
     // if timer is off, set to on, set color and start timer
     if (timerOn === false){
         timerOn = true
-        timer.style.color = 'rgb(246, 71, 71)';
+        timer.css('color', 'rgb(246, 71, 71)');
         timerInterval = setInterval(updateTimer, 1000);
     }
     // start game
@@ -73,9 +73,12 @@ startButton.addEventListener('click', e => {
 })
 
 // column number action button
-columnNumberButton.addEventListener('click', e => {
+columnNumberButton.on('click', e => {
     // get number from user input
-    const inputValue = parseInt(document.querySelector('#numberColumns').value, 10);
+    const inputValue = parseInt($('#numberColumns').val(), 10); 
+    // jquery for the above line?
+    
+
     // if input value is true and a number, then set value
     if(inputValue && typeof inputValue === 'number'){
         if (inputValue > 10){
@@ -92,7 +95,7 @@ columnNumberButton.addEventListener('click', e => {
 })
 
 // this turns off the timer when stop button is pressed
-stopButton.addEventListener('click', e => {
+stopButton.on('click', e => {
     // turn off timer
     clearInterval(timerInterval);
     // set timerOn to false
@@ -105,7 +108,7 @@ stopButton.addEventListener('click', e => {
 const updateTimer = () => {
     // ChatGPT helped with this code: https://chat.openai.com/c/6a37ffb8-48c9-43fd-9a5a-f738bf2bf722
     // timeLeft is a global variable, initially set to 30
-    timer.innerText = timeLeft
+    timer.text(timeLeft)
     // decrement timeLeft by one
     timeLeft--
     // if timeLeft is less than 0 
@@ -116,13 +119,13 @@ const updateTimer = () => {
         // if players score is more than high score, set high score to player score
         if (playerScore > highScore){
             highScore = playerScore
-            highScoreDisplay.innerText = highScore
+            highScoreDisplay.text(highScore)
         }
         // if player score is 0 player loses, otherwise they win
         if (playerScore === 0){
-            statusDisplay.innerText = "Game Over! You Lose! You didn't find any cookies!"
+            statusDisplay.text("Game Over! You Lose! You didn't find any cookies!")
         } else {
-            statusDisplay.innerText = "Game Over! You Win! You found some cookies!"
+            statusDisplay.text("Game Over! You Win! You found some cookies!")
         }
     }
 }
@@ -130,24 +133,25 @@ const updateTimer = () => {
 // create board
 const createBoard = (colNo) => {
     // get gameboard container from html
-    const gameboardContainer = document.querySelector('#gameboard-container')
+    const gameboardContainer = $('#gameboard-container')
     // create a section to be attached to gameboard container
-    const board = document.createElement('section')
+    const board = $('<section></section>');
     // give board id
-    board.setAttribute('id', 'gameboard')
+    board.attr('id', 'gameboard')
     // set width of gameboard
-    board.style.width = `${50 * colNo}px`
+    board.css('width', `${50 * colNo}px`);
+
     // set grid template columns
-    board.style.gridTemplateColumns = `repeat(${colNo}, 1fr)`
+    board.css('gridTemplateColumns', `repeat(${colNo}, 1fr)`)
     // populate board with cells 
     for(let i = 0; i < colNo ** 2; i++){
-        const cell = document.createElement('div')
-        cell.setAttribute('class', 'cell')
-        cell.setAttribute('id', i)
-        board.appendChild(cell)
+        const cell = $('<div></div>')
+        cell.attr('class', 'cell')
+        cell.attr('id', i)
+        board.append(cell)
     }
     // append board to container
-    gameboardContainer.appendChild(board)
+    gameboardContainer.append(board)
 }
 
 // calculate rows
@@ -190,16 +194,16 @@ const calculateColumns = (colNo) => {
 // create cookie 
 const createCookie = () => {    
     // create image element
-    const cookiePic = document.createElement('img')
+    const cookiePic = $('<img>')
     // Image author: Vincent Le Moign: https://commons.wikimedia.org/wiki/File:556-cookie.svg
     // give element the source
-    cookiePic.src = './assets/cookie-pic.png' 
+    cookiePic.attr('src', './assets/cookie-pic.png');
     // assign dimensions
-    cookiePic.style.maxWidth = '47px'
-    cookiePic.style.maxHeight = '47px'
+    cookiePic.css('maxWidth', '47px')
+    cookiePic.css('maxHeight', '47px')
     // set class
-    cookiePic.setAttribute('class', 'cookiePic')
-    return cookiePic;
+    cookiePic.attr('class', 'cookiePic')
+    return cookiePic[0];
 }
 
 // what happens if player finds cookie
@@ -207,33 +211,34 @@ const cookieFoundAction = (e) => {
     // create a cookie image
     cookiePic = createCookie()
     // append the image to the cell
-    e.target.appendChild(cookiePic)
+    e.target.append(cookiePic)
     // display message 
-    statusDisplay.innerText = 'YOU GET A COOOKIE!'
+    statusDisplay.text('YOU GET A COOOKIE!')
     // for windows greater thann 810 allow dragging
     // This is the minimum size that allows 10 columns 
     if (window.innerWidth > 810){
         // enable cookie dragging: this code was adapted from Youtube content creator "Darwin Tech": 
         // https://www.youtube.com/watch?v=_G8G1OrEOrI
-        cookiePic.setAttribute('cursor', 'move')
-        cookiePic.setAttribute('draggable', 'true')
-        dropZone.addEventListener('dragover', e => {
-            e.preventDefault()
-        })
+        cookiePic.setAttribute('cursor', 'move') // this has to be left in js since it doesn't work in jquery
+        cookiePic.setAttribute('draggable', 'true') // this has to be left in js since it doesn't work in jquery
+        dropZone.on('dragover', function(e) {
+            e.preventDefault();
+        });
+        
         // allow dropping cookie only if timer is still on
-        dropZone.addEventListener('drop', e=>{
+        dropZone.on('drop', e=>{
             if (timerOn === true){
-                dropZone.appendChild(cookiePic)
-                playerScore = dropZone.querySelectorAll('.cookiePic').length;
-                playerScoreDisplay.innerText = playerScore;
+                dropZone.append(cookiePic)
+                playerScore = dropZone.find('.cookiePic').length;
+                playerScoreDisplay.text(playerScore);
                 startGame(columnNumber)
             }
         })
     // for screens smaller than 810, cookie goes to jar automatically, because dragging doesn't really work on mobile screens
     } else if (timerOn === true){
-            dropZone.appendChild(cookiePic)
-            playerScore = dropZone.querySelectorAll('.cookiePic').length;
-            playerScoreDisplay.innerText = playerScore;
+            dropZone.append(cookiePic)
+            playerScore = dropZone.find('.cookiePic').length;
+            playerScoreDisplay.text(playerScore);
             startGame(columnNumber)
     }
 }
@@ -241,19 +246,19 @@ const cookieFoundAction = (e) => {
 // what happens if player clicks a cell where the cookie isn't
 const cookieNotFoundAction = (e, id) => {
     // place an x in the cell
-    e.target.innerText = 'x'
+    $(e.target).text('x')
     // clear the status display
-    statusDisplay.innerText = '';
+    statusDisplay.text('');
     // check if the row contains the cookie. If so, give player hint
     rows.forEach(x => {
         if (x.includes(id) && x.includes(cookieNumber)){    
-            statusDisplay.innerText = "It's in this row!";
+            statusDisplay.text("It's in this row!")
         }
     })
     // check if the column contains the cookie. If so, give player hint
     columns.forEach(x => {
         if (x.includes(id) && x.includes(cookieNumber)){
-            statusDisplay.innerText = "It's in this column!";
+            statusDisplay.text("It's in this column!")
         }
     })
 }
@@ -262,13 +267,13 @@ const cookieNotFoundAction = (e, id) => {
 // make cells clickable, game playable
 const cellsClickable = () => {    
     // get each cell by class
-    document.querySelectorAll('.cell').forEach(x =>{
+    $('.cell').each(function() {
         // make each cell clickable
-        x.addEventListener('click', e => {
+        $(this).on('click', e => {
             // if timer is still on get id of cell
             if (timerOn){
 
-                const id = parseInt(e.target.id, 10)
+                const id = parseInt($(this).attr('id'), 10)
                 
                 // if 'o' is at that id number, call cookieFoundAction function
                 if (gameArray[id] === 'o'){
@@ -293,11 +298,11 @@ const startGame = (colNo) => {
     gameArray.length = 0;
     rows.length = 0;
     columns.length = 0;
-    if (document.querySelector('#gameboard')){
-        document.querySelector('#gameboard').remove();
+    if ($('#gameboard')){
+        $('#gameboard').remove();
     }
-    statusDisplay.innerText = ''
-    document.querySelector('#numberColumns').value = ''
+    statusDisplay.text('')
+    $('#numberColumns').val = ''
 
     // hardcode column number for screens less than 520;
     // 520 is the smallest width you can have 10 columns
