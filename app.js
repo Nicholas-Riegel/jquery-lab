@@ -51,10 +51,7 @@ startButton.on('click', e => {
     // chatGPT definitely helped with this code: https://chat.openai.com/c/b5238c30-289f-4511-8ce2-47197b7ed0f8
     // remove cookies from cookie jar drop zone
     const parent = $('#dropZone');
-    const childrenToRemove = parent.find('.cookiePic');
-    childrenToRemove.each(function() {
-        $(this).remove();
-    });
+    parent.empty();
 
     // set player score to 0
     playerScore = 0
@@ -302,7 +299,7 @@ const startGame = (colNo) => {
         $('#gameboard').remove();
     }
     statusDisplay.text('')
-    $('#numberColumns').val = ''
+    $('#numberColumns').val('')
 
     // hardcode column number for screens less than 520;
     // 520 is the smallest width you can have 10 columns
